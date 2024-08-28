@@ -114,3 +114,6 @@ via*.json
 
 # Keep firmware file
 !keyboards/keychron/*/firmware/*.bin
+# Emacs
+\#*
+\.\#*
