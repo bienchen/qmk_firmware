@@ -78,12 +78,122 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // b13nch3ns' mods beyond the keymap (above)
 // LED positions
-// 0: esc
+//  0: esc
+//  1: F1
+//  2: F2
+//  3: F3
+//  4: F4
+//  5: F5
+//  6: F6
+//  7: F7
+//  8: F8
+//  9: F9
+// 10: F10
+// 11: F11 
+// 12: F12
+// 13: ins
+// 14: del
+// 15: M1
+// 16: `~
+// 17: 1
+// 18: 2
+// 19: 3
+// 20: 4
+// 21: 5
+// 22: 6
+// 23: 7
+// 24: 8
+// 25: 9
+// 26: 0
+// 27: -_
+// 28: =+
+// 29: backspace
+// 30: pgup
+// 31: M2
+// 32: Tab
+// 33: Q
+// 34: W
+// 35: E
+// 36: R
+// 37: T
+// 38: Y
+// 39: U
+// 40: I
+// 41: O
+// 42: P
+// 43: [{
+// 44: ]}
+// 45: \|
+// 46: pgdn
+// 47: M3
+// 48: CapsLock
+// 49: A
+// 50: S
+// 51: D
+// 52: F
+// 53: G
+// 54: H
+// 55: J
+// 56: K
+// 57: L
+// 58: ;:
+// 59: '"
+// 60: RETURN
+// 61: home
+// 62: M4
+// 63: LSHIFT
+// 64: Z
+// 65: X
+// 66: C
+// 67: V
+// 68: LB
+// 69: RB
+// 70: N
+// 71: M
+// 72: ,<
+// 73: .>
+// 74: /?
+// 75: RSHIFT
+// 76: UPARROW
+// 77: M5
+// 78: fn1
+// 79: LCTRL
+// 80: LOPT
+// 81: LSPACE
+// 82: LCMD
+// 83: RSPACE
+// 84: fn
+// 85: RCTRL
+// 86: LEFTARROW
+// 87: DOWNARROW
+// 88: RIGHTARROW
+// Black: RGB_GOLD, RGB_CORAL, RGB_YELLOW, RGB_GOLDENROD, AZURE, MAGENTA,
+//        ORANGE, RED
+// Grey: RGB_GOLD
+// Red: RGB_AZURE, 
+// White keys: RGB_MAGENTA, RGB_GOLDENROD, RGB_GREEN (chars), RGB_AZURE,
+//             RGB_ORANGE
+// Layer indicator: GOLD seems to work with black, white, grey (not so much
+//                  with red)
+// Ideas:
+// - capslock only on tap dance
 bool rgb_matrix_indicators_user(void) {
-  int i = 1;
-  rgb_matrix_set_color(i,   RGB_GREEN);
+  int i = 77;
+  // Find indeces
+  rgb_matrix_set_color(i,   RGB_GOLD);
   rgb_matrix_set_color(i+1, RGB_BLUE);
   rgb_matrix_set_color(i+2, RGB_RED);
   rgb_matrix_set_color(i+3, RGB_YELLOW);
+  rgb_matrix_set_color(i+4, RGB_GREEN);
+  rgb_matrix_set_color(i+5, RGB_AZURE);
+  rgb_matrix_set_color(i+6, RGB_CORAL);
+  rgb_matrix_set_color(i+7, RGB_GOLDENROD);
+  rgb_matrix_set_color(i+8, RGB_MAGENTA);
+  rgb_matrix_set_color(i+9, RGB_ORANGE);
+  rgb_matrix_set_color(i+10, RGB_SPRINGGREEN);
+  rgb_matrix_set_color(i+11, RGB_PURPLE);
+  // Find nice colour for specific key
+  rgb_matrix_set_color(0, RGB_GOLDENROD); // esc GOLD
+
   return true;
 }
