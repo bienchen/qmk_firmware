@@ -75,3 +75,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+// b13nch3ns' mods beyond the keymap (above)
+bool rgb_matrix_indicators_user(void) {
+  // LED positions
+  //  0: esc
+  // paint Esc red
+  rgb_matrix_set_color(0, RGB_RED);
+
+  return true;
+}
