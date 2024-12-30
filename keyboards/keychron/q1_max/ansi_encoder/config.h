@@ -29,6 +29,7 @@
         { B8, B9 }
 #    define SNLED23751_SPI_DIVISOR 16
 #    define SPI_DRIVER SPID1
+#    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
 
 /* Scan phase of led driver set as MSKPHASE_9CHANNEL(defined as 0x03 in snled27351.h) */
 #    define PHASE_CHANNEL MSKPHASE_9CHANNEL

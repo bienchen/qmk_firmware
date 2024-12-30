@@ -77,11 +77,104 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 // b13nch3ns' mods beyond the keymap (above)
+// layer colouring
+void set_non_passthrough_colour(uint8_t current_layer, uint8_t r, uint8_t g, uint8_t b) {
+  // iterate keymaps
+  uint16_t k = 0;
+  for (uint16_t row = 0; row < MATRIX_ROWS; row++) {
+    for (uint16_t col = 0; col < MATRIX_COLS; col++) {
+      // column 14 skips the rotary encoder and around the enter key
+      if (col == 14) {
+        switch(row) {
+        case 0:
+        case 3:
+          continue;
+          break;
+        default:
+          break;
+        }
+      }
+      else {
+        switch(row) {
+        case 4: // row 4 skips around the shift keys
+          switch(col) {
+          case 1:
+          case 12:
+            continue;
+            break;
+          default:
+            break;
+          }
+          break;
+        case 5: // row 5 has some holes in the matrix because of the space bar
+          switch(col) {
+          case 3:
+          case 4:
+          case 5:
+          case 7:
+          case 8:
+            continue;
+            break;
+          default:
+            break;
+          }
+          break;
+        default:
+          break;
+        }
+      }
+      if (keymaps[current_layer][row][col] != _______) {
+        rgb_matrix_set_color(k, r, g, b);
+      }
+      k++;
+    }
+  }
+}
+
 bool rgb_matrix_indicators_user(void) {
-  // LED positions
-  //  0: esc
+  /* LED positions
+     0: Esc|1 : F1|2:  F2|3: F3|4: F4|5:  F5|6: F6|7:  F7|8: F8|9:  F9|10:F10
+     11:F11|12:F12|13:Del|14: `|15: 1|16: 2|17:  3|18:  4|19: 5|20:  6|21:  7
+     22:  8|23:  9|24:  0|25: -|26: =|27:BS|28: HM|29:TAB|30: Q|31:  W|32:  E
+     33:  R|34:  T|35:  Y|36: U|37: I|38: O|39:  P|40:  [|41: ]|42:  ||43:PGU
+     44:CLK|45:  A|46:  S|47: D|48: F|49: G|50:  H|51:  j|52: K|53:  L|54:  ;
+     55:  '|56:ENT|57:PGD|58:SH|59: Z|60: X|61:  C|62:  V|63: B|64:  N|65:  M
+     66:  <|67:  >|68:  ?|69:SH|70:AU|71:CR|72:SYS|73:ALT|74:SP|75:ALT|76: FN
+     77: CR|78: AL|79: AD|80:AR
+
+     Rows/ Cols with LEDs
+       00|01|02|03|04|05|06|07|08|09|10|11|12|13|14
+     -----------------------------------------------
+     0| 0| 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|  |
+     1|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|
+     2|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|
+     3|44|45|46|47|48|49|50|51|52|53|54|55|56|57|  |
+     4|58|  |59|60|61|62|63|64|65|66|67|68|  |69|70|
+     5|71|72|73|  |  |  |74|  |  |75|76|77|78|79|80|
+  */
+
+  // Some extra highlights 
   // paint Esc red
   rgb_matrix_set_color(0, RGB_RED);
+
+  // layer based RGB matrix settings
+  // ToDo: get current brightness
+  // ToDo: turn pass through LEDs off
+  uint8_t current_layer = get_highest_layer(layer_state);
+  switch (current_layer) {
+  case MAC_FN:
+    set_non_passthrough_colour(current_layer, RGB_GOLD);// CYAN SPRINGGREEN
+    break;
+  case WIN_BASE:
+    set_non_passthrough_colour(current_layer, RGB_SPRINGGREEN);
+    break;
+  // case WIN_FN:
+    // set_non_passthrough_colour(current_layer, RGB_WHITE);
+    // break;
+  default: // for any other layers, or the default layer MAC_BASE do nothing, so
+           // RGB can still be configured.
+    break;
+  }
 
   return true;
 }
