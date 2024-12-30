@@ -126,6 +126,9 @@ void set_non_passthrough_colour(uint8_t current_layer, uint8_t r, uint8_t g, uin
       if (keymaps[current_layer][row][col] != _______) {
         rgb_matrix_set_color(k, r, g, b);
       }
+      else {
+        rgb_matrix_set_color(k, RGB_OFF);
+      }
       k++;
     }
   }
@@ -163,10 +166,10 @@ bool rgb_matrix_indicators_user(void) {
   uint8_t current_layer = get_highest_layer(layer_state);
   switch (current_layer) {
   case MAC_FN:
-    set_non_passthrough_colour(current_layer, RGB_GOLD);// CYAN SPRINGGREEN
+    set_non_passthrough_colour(current_layer, RGB_GOLDENROD);// CYAN SPRINGGREEN
     break;
   case WIN_BASE:
-    set_non_passthrough_colour(current_layer, RGB_SPRINGGREEN);
+    set_non_passthrough_colour(current_layer, RGB_PURPLE);
     break;
   // case WIN_FN:
     // set_non_passthrough_colour(current_layer, RGB_WHITE);
