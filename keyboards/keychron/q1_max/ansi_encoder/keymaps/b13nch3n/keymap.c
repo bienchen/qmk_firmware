@@ -162,7 +162,6 @@ bool rgb_matrix_indicators_user(void) {
 
   // layer based RGB matrix settings
   // ToDo: get current brightness
-  // ToDo: turn pass through LEDs off
   uint8_t current_layer = get_highest_layer(layer_state);
   switch (current_layer) {
   case MAC_FN:
