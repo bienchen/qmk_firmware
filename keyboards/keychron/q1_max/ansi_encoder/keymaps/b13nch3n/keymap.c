@@ -78,7 +78,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // b13nch3ns' mods beyond the keymap (above)
 // layer colouring
-void set_non_passthrough_colour(uint8_t current_layer, uint8_t r, uint8_t g, uint8_t b) {
+void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uint8_t v) {
+  // adjust brightness
+  HSV hsv = {h, s, v};
+  hsv.v = rgb_matrix_get_val();
+  RGB rgb = hsv_to_rgb(hsv);
+
   // iterate keymaps
   uint16_t k = 0;
   for (uint16_t row = 0; row < MATRIX_ROWS; row++) {
@@ -124,7 +129,7 @@ void set_non_passthrough_colour(uint8_t current_layer, uint8_t r, uint8_t g, uin
         }
       }
       if (keymaps[current_layer][row][col] != _______) {
-        rgb_matrix_set_color(k, r, g, b);
+        rgb_matrix_set_color(k, rgb.r, rgb.g, rgb.b);
       }
       else {
         rgb_matrix_set_color(k, RGB_OFF);
@@ -161,14 +166,14 @@ bool rgb_matrix_indicators_user(void) {
   rgb_matrix_set_color(0, RGB_RED);
 
   // layer based RGB matrix settings
-  // ToDo: get current brightness
+  // ToDo: Turn off other lights based on current effect
   uint8_t current_layer = get_highest_layer(layer_state);
   switch (current_layer) {
   case MAC_FN:
-    set_non_passthrough_colour(current_layer, RGB_GOLDENROD);// CYAN SPRINGGREEN
+    set_non_passthrough_colour(current_layer, HSV_GREEN);// CYAN SPRINGGREEN PURPLE
     break;
   case WIN_BASE:
-    set_non_passthrough_colour(current_layer, RGB_PURPLE);
+    set_non_passthrough_colour(current_layer, HSV_PINK);
     break;
   // case WIN_FN:
     // set_non_passthrough_colour(current_layer, RGB_WHITE);
