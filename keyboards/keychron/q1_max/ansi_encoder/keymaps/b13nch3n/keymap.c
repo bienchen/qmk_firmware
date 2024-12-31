@@ -78,11 +78,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // b13nch3ns' mods beyond the keymap (above)
 // layer colouring
+
+void turn_off_led(uint8_t pos) {
+  rgb_matrix_set_color(pos, RGB_OFF);
+}
+void turn_off_led_dummy(uint8_t pos) {}
+
 void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uint8_t v) {
   // adjust brightness
   HSV hsv = {h, s, v};
   hsv.v = rgb_matrix_get_val();
   RGB rgb = hsv_to_rgb(hsv);
+
+  // turn lights off based on effect
+  uint8_t mode = rgb_matrix_get_mode();
+  void (*tol_ptr)(uint8_t);
+  switch(mode) {
+  case RGB_MATRIX_TYPING_HEATMAP:
+    tol_ptr = &turn_off_led_dummy;
+    break;
+  default:
+    tol_ptr = &turn_off_led;
+    break;
+  }
 
   // iterate keymaps
   uint16_t k = 0;
@@ -132,7 +150,7 @@ void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uin
         rgb_matrix_set_color(k, rgb.r, rgb.g, rgb.b);
       }
       else {
-        rgb_matrix_set_color(k, RGB_OFF);
+        (*tol_ptr)(k);
       }
       k++;
     }
@@ -166,7 +184,6 @@ bool rgb_matrix_indicators_user(void) {
   rgb_matrix_set_color(0, RGB_RED);
 
   // layer based RGB matrix settings
-  // ToDo: Turn off other lights based on current effect
   uint8_t current_layer = get_highest_layer(layer_state);
   switch (current_layer) {
   case MAC_FN:
