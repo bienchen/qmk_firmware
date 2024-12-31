@@ -77,8 +77,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// b13nch3ns' mods beyond the keymap (above)
-// layer colouring
+/* b13nch3ns' mods beyond the keymap (above) */
+/* layer colouring */
 bool rgb_matrix_indicators_user(void) {
   /* LED positions
      0: Esc|1 : F1|2:  F2|3: F3|4: F4|5:  F5|6: F6|7:  F7|8: F8|9:  F9|10:F10
@@ -101,9 +101,9 @@ bool rgb_matrix_indicators_user(void) {
      5|71|72|73|  |  |  |74|  |  |75|76|77|78|79|80|
   */
 
-  // Some extra highlights 
-  // paint Esc red
-  rgb_matrix_set_color(0, RGB_RED);
+  /* Some extra highlights
+     paint Esc red */
+  rgb_matrix_set_color_hsv(0, HSV_RED);
 
   // layer based RGB matrix settings
   uint8_t current_layer = get_highest_layer(layer_state);
