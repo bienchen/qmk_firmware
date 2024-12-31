@@ -1,3 +1,5 @@
+// Copyright 2024 Stefan Bienert (@bienchen)
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef USERSPACE
 #define USERSPACE
 
