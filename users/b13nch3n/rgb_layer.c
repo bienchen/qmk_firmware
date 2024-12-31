@@ -1,5 +1,7 @@
 // Copyright 2024 Stefan Bienert (@bienchen)
 // SPDX-License-Identifier: GPL-2.0-or-later
+#include <stdarg.h>
+
 #include "rgb_layer.h"
 
 void _turn_off_led(uint8_t pos) {
@@ -7,10 +9,9 @@ void _turn_off_led(uint8_t pos) {
 }
 void _turn_off_led_dummy(uint8_t pos) {}
 
-void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uint8_t v, const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS]) {
+void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MATRIX_COLS]) {
     /* adjust brightness */
-    HSV hsv = {h, s, v};
-    hsv.v   = rgb_matrix_get_val();
+    HSV hsv = {h, s, rgb_matrix_get_val()};
     RGB rgb = hsv_to_rgb(hsv);
 
     /* turn lights off based on effect */
@@ -68,12 +69,34 @@ void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uin
                         break;
                 }
             }
-            if (keymaps[current_layer][row][col] != _______) {
+            if (keymap[row][col] != _______) {
                 rgb_matrix_set_color(k, rgb.r, rgb.g, rgb.b);
             } else {
                 (*tol_ptr)(k);
             }
             k++;
+        }
+    }
+}
+
+void rgb_matrix_set_non_passthrough_color(const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS], uint8_t n_layers, ...) {
+    /* Get the current layer */
+    uint8_t current_layer = get_highest_layer(layer_state);
+    /* Search the list of variable arguments for current layer */
+    uint8_t layer;
+    uint8_t h;
+    uint8_t s;
+    va_list layer_hsv_list;
+    va_start(layer_hsv_list, n_layers);
+    for (uint8_t i = 0; i < n_layers; i++) {
+        /* pop 4 values of the variable argument list */
+        layer = (uint8_t)va_arg(layer_hsv_list, int);
+        h     = (uint8_t)va_arg(layer_hsv_list, int);
+        s     = (uint8_t)va_arg(layer_hsv_list, int);
+        va_arg(layer_hsv_list, int);
+        /* On hitting the right layer, colour keys not set to pass-through */
+        if (layer == current_layer) {
+            _set_non_passthrough_color(h, s, keymaps[layer]);
         }
     }
 }
