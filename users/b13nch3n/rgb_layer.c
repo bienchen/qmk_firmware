@@ -77,3 +77,12 @@ void set_non_passthrough_colour(uint8_t current_layer, uint8_t h, uint8_t s, uin
         }
     }
 }
+
+void rgb_matrix_set_color_hsv(uint8_t index, uint8_t h, uint8_t s, uint8_t v) {
+    /* Set colour of a single LED respecting the current brightness. That means,
+       the v paramete ris ignored and only exists to enable use of QMKs HSV
+       C macros. */
+    HSV hsv = {h, s, rgb_matrix_get_val()};
+    RGB rgb = hsv_to_rgb(hsv);
+    rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
+}
