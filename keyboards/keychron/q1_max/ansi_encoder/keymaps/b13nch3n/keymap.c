@@ -105,22 +105,10 @@ bool rgb_matrix_indicators_user(void) {
      paint Esc red */
   rgb_matrix_set_color_hsv(0, HSV_RED);
 
-  // layer based RGB matrix settings
-  uint8_t current_layer = get_highest_layer(layer_state);
-  switch (current_layer) {
-  case MAC_FN:
-    set_non_passthrough_colour(current_layer, HSV_GREEN, keymaps);// CYAN SPRINGGREEN PURPLE
-    break;
-  case WIN_BASE:
-    set_non_passthrough_colour(current_layer, HSV_PINK, keymaps);
-    break;
-  // case WIN_FN:
-    // set_non_passthrough_colour(current_layer, RGB_WHITE);
-    // break;
-  default: // for any other layers, or the default layer MAC_BASE do nothing, so
-           // RGB can still be configured.
-    break;
-  }
+  /* layer based RGB matrix settings */
+  rgb_matrix_set_non_passthrough_color(keymaps, 2,
+                                       MAC_FN, HSV_ORANGE,
+                                       WIN_BASE, HSV_MAGENTA);
 
   return true;
 }
