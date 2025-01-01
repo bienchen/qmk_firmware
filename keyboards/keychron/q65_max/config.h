@@ -59,6 +59,9 @@
 /* Reinit LED driver on tranport changed */
 #        define REINIT_LED_DRIVER 1
 
+/* Set default effect: WPM heatmap */
+#    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
+
 #    endif
 
 /* Keep USB connection in blueooth mode */
