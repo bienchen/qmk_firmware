@@ -91,6 +91,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 /* b13nch3ns' mods beyond the keymap (above) */
 /* layer colouring */
+bool _idx_has_led_keychron_q65_max(uint8_t row, uint8_t col) {
+    /* determine if position [row, col] of the keyboard matrix has a LED. */
+    //[4,4], [4,5], [4,6], [4,8], [4,9]
+    /* column 14 skips the rotary encoder and around the enter key */
+    if (row == 0 && col == 0) {
+      return false;
+    } else if (row == 2 && col == 15) {
+      return false;
+    } else if (row == 3 && col == 2) {
+      return false;
+    }
+    else if (row == 4) {
+      switch (col) {
+      case 4:
+      case 5:
+      case 6:
+      case 8:
+      case 9:
+        return false;
+        break;
+      default:
+        break;
+      }
+    }
+
+    return true;
+}
+
 bool rgb_matrix_indicators_user(void) {
   /* LED positions
       0:  `| 1:  1| 2:  2| 3:  3| 4: 4| 5:  5| 6: 6| 7: 7| 8:  8| 9: 9|10:  0
@@ -112,15 +140,16 @@ bool rgb_matrix_indicators_user(void) {
   */
 
   /* Some extra highlights on macro keys */
-  rgb_matrix_set_color_hsv(15, HSV_PURPLE);// RED AZURE CHARTREUSE CORAL GOLD
-  rgb_matrix_set_color_hsv(31, HSV_PURPLE);// GOLDENROD
-  rgb_matrix_set_color_hsv(46, HSV_PURPLE);
-  rgb_matrix_set_color_hsv(61, HSV_PURPLE);
+  rgb_matrix_set_color_hsv(15, HSV_AZURE);
+  rgb_matrix_set_color_hsv(31, HSV_AZURE);
+  rgb_matrix_set_color_hsv(46, HSV_AZURE);
+  rgb_matrix_set_color_hsv(61, HSV_AZURE);
 
   /* layer based RGB matrix settings */
-  //rgb_matrix_set_non_passthrough_color(keymaps, 2,
-  //                                     MAC_FN, HSV_ORANGE,
-  //                                     WIN_BASE, HSV_MAGENTA);
+  rgb_matrix_set_non_passthrough_color(keymaps, &_idx_has_led_keychron_q65_max,
+                                       2,
+                                       MAC_FN1, HSV_ORANGE,
+                                       FN2, HSV_MAGENTA);
 
   return true;
 }
