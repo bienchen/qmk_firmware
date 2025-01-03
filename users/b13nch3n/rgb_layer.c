@@ -9,12 +9,17 @@ void _turn_off_led(uint8_t pos) {
 }
 void _turn_off_led_dummy(uint8_t pos) {}
 
-void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MATRIX_COLS]) {
+void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MATRIX_COLS], bool (*idx_has_led_ptr)(uint8_t, uint8_t)) {
+    /* Set LEDs of non-pass-through keys to given colour. Colour is described
+       by H & S of HSV, V is used form the current brightness level. For most
+       RGB matrix effects, LEDs of pass-through keys are turned off.
+     */
     /* adjust brightness */
     HSV hsv = {h, s, rgb_matrix_get_val()};
     RGB rgb = hsv_to_rgb(hsv);
-
-    /* turn lights off based on effect */
+    /* turn lights off based on effect
+       to skip turning off, use a pointer to a "do nothing" function
+    */
     uint8_t mode = rgb_matrix_get_mode();
     void (*tol_ptr)(uint8_t);
     switch (mode) {
@@ -25,50 +30,17 @@ void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MA
             tol_ptr = &_turn_off_led;
             break;
     }
-
-    /* iterate keymaps */
+    /* iterate keymap */
     uint16_t k = 0;
     for (uint16_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint16_t col = 0; col < MATRIX_COLS; col++) {
-            /* column 14 skips the rotary encoder and around the enter key */
-            if (col == 14) {
-                switch (row) {
-                    case 0:
-                    case 3:
-                        continue;
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                switch (row) {
-                    case 4: /* row 4 skips around the shift keys */
-                        switch (col) {
-                            case 1:
-                            case 12:
-                                continue;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 5: /* row 5 has some holes in the matrix because of the space bar */
-                        switch (col) {
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 7:
-                            case 8:
-                                continue;
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
-                }
+            /* Some matrices have "holes" mappng row/ column coordinates to LED
+               positions. Determine to skip them...
+            */
+            if ((*idx_has_led_ptr)(row, col) == false) {
+                continue;
             }
+            /* do the actual colouring */
             if (keymap[row][col] != _______) {
                 rgb_matrix_set_color(k, rgb.r, rgb.g, rgb.b);
             } else {
@@ -79,7 +51,21 @@ void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MA
     }
 }
 
-void rgb_matrix_set_non_passthrough_color(const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS], uint8_t n_layers, ...) {
+void rgb_matrix_set_non_passthrough_color(const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS], bool (*idx_has_led_ptr)(uint8_t, uint8_t), uint8_t n_layers, ...) {
+    /* Set the RGB matrix for the keymap of the current layer.
+       Takes the `keymaps` 3-dimensional array, an indicator function for
+       coordinates with/ wihtout LEDs, and the number of layers, which are
+       described in the variable list of arguments.
+       The variable list of arguments is a multiple of 4 of the `n_layers`.
+       Each layer is described by the ID of the layer and 3 HSV values. Since
+       the current brightness level is preserved, the V component of HSV is
+       ignored. By using all 3 HSV values, you can use QMKs' colour macros.
+
+       In the current layer, all keys that are not set to pass-through, are
+       turned on with the given colour. All pass-through keys are turned of.
+       There are some exceptions from turning off LEDs for some RGB matrix
+       effects.
+    */
     /* Get the current layer */
     uint8_t current_layer = get_highest_layer(layer_state);
     /* Search the list of variable arguments for current layer */
@@ -96,14 +82,14 @@ void rgb_matrix_set_non_passthrough_color(const uint16_t keymaps[][MATRIX_ROWS][
         va_arg(layer_hsv_list, int);
         /* On hitting the right layer, colour keys not set to pass-through */
         if (layer == current_layer) {
-            _set_non_passthrough_color(h, s, keymaps[layer]);
+            _set_non_passthrough_color(h, s, keymaps[layer], idx_has_led_ptr);
         }
     }
 }
 
 void rgb_matrix_set_color_hsv(uint8_t index, uint8_t h, uint8_t s, uint8_t v) {
     /* Set colour of a single LED respecting the current brightness. That means,
-       the v paramete ris ignored and only exists to enable use of QMKs HSV
+       the v paramete ris ignored and only exists to enable use of QMKs' HSV
        C macros. */
     HSV hsv = {h, s, rgb_matrix_get_val()};
     RGB rgb = hsv_to_rgb(hsv);
