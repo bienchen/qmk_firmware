@@ -79,6 +79,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 /* b13nch3ns' mods beyond the keymap (above) */
 /* layer colouring */
+bool _idx_has_led_keychron_q1_max(uint8_t row, uint8_t col) {
+    /* determine if position [row, col] of the keyboard matrix has a LED. */
+    /* column 14 skips the rotary encoder and around the enter key */
+    if (col == 14) {
+        switch (row) {
+            case 0:
+            case 3:
+                return false;
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (row) {
+            case 4: /* row 4 skips around the shift keys */
+                switch (col) {
+                    case 1:
+                    case 12:
+                        return false;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 5: /* row 5, holes because of the space bar */
+                switch (col) {
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 7:
+                    case 8:
+                        return false;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    return true;
+}
+
 bool rgb_matrix_indicators_user(void) {
   /* LED positions
      0: Esc|1 : F1|2:  F2|3: F3|4: F4|5:  F5|6: F6|7:  F7|8: F8|9:  F9|10:F10
@@ -106,7 +150,8 @@ bool rgb_matrix_indicators_user(void) {
   rgb_matrix_set_color_hsv(0, HSV_RED);
 
   /* layer based RGB matrix settings */
-  rgb_matrix_set_non_passthrough_color(keymaps, 2,
+  rgb_matrix_set_non_passthrough_color(keymaps, &_idx_has_led_keychron_q1_max,
+                                       2,
                                        MAC_FN, HSV_ORANGE,
                                        WIN_BASE, HSV_MAGENTA);
 
