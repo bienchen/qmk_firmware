@@ -113,13 +113,13 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 return false;
                 break;
             case ES_NEXT:
-              SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
-              return false;
-              break;
+                SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
+                return false;
+                break;
             case ES_PREV:
-              SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
-              return false;
-              break;
+                SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
+                return false;
+                break;
             default:
                 tapped_c = false;
                 return true;
