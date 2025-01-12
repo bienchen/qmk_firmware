@@ -19,7 +19,7 @@
 #ifdef CONSOLE_ENABLE
 #include "print.h"
 #endif
-#include "rgb_layer.h"
+#include "b13nch3n_common.h"
 
 enum layers {
     MAC_BASE,

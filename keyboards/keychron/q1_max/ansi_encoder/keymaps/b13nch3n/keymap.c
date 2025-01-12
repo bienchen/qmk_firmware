@@ -16,7 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include "keychron_common.h"
-#include "rgb_layer.h"
+#include "b13nch3n_common.h"
 
 enum layers {
     MAC_BASE,
@@ -40,8 +40,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            KC_END,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
         _______,  _______, _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
-        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______,
-        _______,  _______,  _______,                                _______,                                MO(WIN_BASE),  _______,  _______,  MC_0,  _______,  MC_1),
+        _______,            _______,  _______,  ES_CORU,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______,
+        _______,  _______,  _______,                                _______,                                MO(WIN_BASE),  _______,  _______,  ES_PREV,  _______,  ES_NEXT),
 
     [WIN_BASE] = LAYOUT_ansi_82(
         _______,  KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   _______,            RGB_TOG,
@@ -71,6 +71,13 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 #endif // ENCODER_MAP_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    /* b13nch3ns' macros - begin */
+    if (!process_record_b13nch3n(keycode, record)) {
+      return false;
+    }
+    /* b13nch3ns' macros - end */
+
     if (!process_record_keychron_common(keycode, record)) {
         return false;
     }
@@ -78,7 +85,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 /* b13nch3ns' mods beyond the keymap (above) */
-/* layer colouring */
+/* layer colouring/ LEDs... */
 bool _idx_has_led_keychron_q1_max(uint8_t row, uint8_t col) {
     /* determine if position [row, col] of the keyboard matrix has a LED. */
     /* column 14 skips the rotary encoder and around the enter key */
@@ -157,3 +164,5 @@ bool rgb_matrix_indicators_user(void) {
 
   return true;
 }
+
+/* Macros */

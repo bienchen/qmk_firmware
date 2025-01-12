@@ -4,6 +4,7 @@
 
 #include "b13nch3n_common.h"
 
+/* RGB Matrix */
 void _turn_off_led(uint8_t pos) {
     rgb_matrix_set_color(pos, RGB_OFF);
 }
@@ -20,7 +21,7 @@ void _set_non_passthrough_color(uint8_t h, uint8_t s, const uint16_t keymap[][MA
     /* turn lights off based on effect
        to skip turning off, use a pointer to a "do nothing" function
     */
-    uint8_t mode = rgb_matrix_get_mode();
+    uint8_t mode = rgb_matrix_get_mode(); /*  */
     void (*tol_ptr)(uint8_t);
     switch (mode) {
         case RGB_MATRIX_TYPING_HEATMAP:
@@ -94,4 +95,36 @@ void rgb_matrix_set_color_hsv(uint8_t index, uint8_t h, uint8_t s, uint8_t v) {
     HSV hsv = {h, s, rgb_matrix_get_val()};
     RGB rgb = hsv_to_rgb(hsv);
     rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
+}
+
+/* Macros */
+bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        static bool     tapped_c    = false;
+        static uint16_t tap_timer_c = 0;
+
+        switch (keycode) {
+            case ES_CORU:
+                if (tapped_c && !timer_expired(record->event.time, tap_timer_c)) {
+                    SEND_STRING(SS_LOPT("x") "com-u" SS_TAP(X_ENTER));
+                }
+                tapped_c    = true;
+                tap_timer_c = record->event.time + TAPPING_TERM;
+                return false;
+                break;
+            case ES_NEXT:
+              SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
+              return false;
+              break;
+            case ES_PREV:
+              SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
+              return false;
+              break;
+            default:
+                tapped_c = false;
+                return true;
+                break;
+        }
+    }
+    return true;
 }
