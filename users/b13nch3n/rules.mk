@@ -19,9 +19,10 @@ SRC += b13nch3n_common.c
 
 
 
-    ES_CORU = SAFE_RANGE, /* Emacs: comment-or-uncomment-region */
-    ES_NEXT,              /* Emacs: switch-to-next-buffer */
-    ES_PREV,              /* Emacs: switch-to-prev-buffer */
+ifeq ($(strip $(EMACS_COMMENTING_ENABLE)), yes)
+    OPT_DEFS += -DEMACS_COMMENTING_ENABLE
+endif
+
 ifeq ($(strip $(EMACS_BUFFER_SWITCHER_ENABLE)), yes)
     OPT_DEFS += -DEMACS_BUFFER_SWITCHER_ENABLE
 endif

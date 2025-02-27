@@ -36,7 +36,7 @@ The following table lists what needs to be enabled in your `rules.mk` and which 
 | `rules.mk`                     | Keycode              | What? |
 | :---                           | :---                 | :---  |
 | `EMACS_BUFFER_SWITCHER_ENABLE` | `ES_PREV`, `ES_NEXT` | Switch to next or previous buffer in Emacs (`switch-to-prev-buffer`, `switch-to-next-buffer`) |
-
+| `EMACS_COMMENTING_ENABLE`      | `ES_CORU` | In Emacs, comment or uncomment region (`comment-or-uncomment-region`). Key needs to be double-tapped to work. This is to mimic the old CTRL-C-C behaviour. |
 
 Copyright 2024, 2025 Stefan Bienert @bienchen
 

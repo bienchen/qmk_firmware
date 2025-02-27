@@ -100,10 +100,13 @@ void rgb_matrix_set_color_hsv(uint8_t index, uint8_t h, uint8_t s, uint8_t v) {
 /* Macros */
 bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
+#ifdef EMACS_COMMENTING_ENABLE
         static bool     tapped_c    = false;
         static uint16_t tap_timer_c = 0;
+#endif
 
         switch (keycode) {
+#ifdef EMACS_COMMENTING_ENABLE
             case ES_CORU:
                 if (tapped_c && !timer_expired(record->event.time, tap_timer_c)) {
                     SEND_STRING(SS_LOPT("x") "com-u" SS_TAP(X_ENTER));
@@ -112,6 +115,7 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 tap_timer_c = record->event.time + TAPPING_TERM;
                 return false;
                 break;
+#endif
 #ifdef EMACS_BUFFER_SWITCHER_ENABLE
             case ES_NEXT:
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
@@ -121,9 +125,11 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
                 return false;
                 break;
-# endif
+#endif
             default:
+#ifdef EMACS_COMMENTING_ENABLE
                 tapped_c = false;
+#endif
                 return true;
                 break;
         }

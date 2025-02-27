@@ -6,7 +6,10 @@
 #include "quantum.h"
 
 enum custom_keycodes {
-    ES_CORU = SAFE_RANGE, /* Emacs: comment-or-uncomment-region */
+  _B13NCH3N_DUMMY = SAFE_RANGE - 1, /* Do not use, handle macro based enum */
+#ifdef EMACS_COMMENTING_ENABLE
+    ES_CORU,               /* Emacs: comment-or-uncomment-region */
+#endif
 #ifdef EMACS_BUFFER_SWITCHER_ENABLE
     ES_NEXT,              /* Emacs: switch-to-next-buffer*/
     ES_PREV,              /* Emacs: switch-to-prev-buffer */
