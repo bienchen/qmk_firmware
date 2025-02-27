@@ -7,8 +7,10 @@
 
 enum custom_keycodes {
     ES_CORU = SAFE_RANGE, /* Emacs: comment-or-uncomment-region */
+#ifdef EMACS_BUFFER_SWITCHER_ENABLE
     ES_NEXT,              /* Emacs: switch-to-next-buffer*/
     ES_PREV,              /* Emacs: switch-to-prev-buffer */
+#endif
 };
 
 void rgb_matrix_set_non_passthrough_color(const uint16_t[][MATRIX_ROWS][MATRIX_COLS], bool (*)(uint8_t, uint8_t), uint8_t, ...);

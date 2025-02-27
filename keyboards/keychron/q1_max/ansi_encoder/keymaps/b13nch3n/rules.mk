@@ -1,2 +1,5 @@
 VIA_ENABLE = yes
 #CONSOLE_ENABLE = yes
+
+# Enable macros
+EMACS_BUFFER_SWITCHER_ENABLE = yes

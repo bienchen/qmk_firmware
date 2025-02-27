@@ -112,6 +112,7 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 tap_timer_c = record->event.time + TAPPING_TERM;
                 return false;
                 break;
+#ifdef EMACS_BUFFER_SWITCHER_ENABLE
             case ES_NEXT:
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
                 return false;
@@ -120,6 +121,7 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
                 return false;
                 break;
+# endif
             default:
                 tapped_c = false;
                 return true;
