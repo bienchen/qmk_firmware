@@ -116,13 +116,23 @@ bool process_record_b13nch3n(uint16_t keycode, keyrecord_t *record) {
                 return false;
                 break;
 #endif
-#ifdef EMACS_BUFFER_SWITCHER_ENABLE
+#ifdef EMACS_BUFFERSWITCHER_ENABLE
             case ES_NEXT:
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_RIGHT));
                 return false;
                 break;
             case ES_PREV:
                 SEND_STRING(SS_LCTL("x") SS_TAP(X_LEFT));
+                return false;
+                break;
+#endif
+#ifdef VIRTUAL_SCREENSWITCHER_ENABLE
+            case VD_NEXT:
+                SEND_STRING(SS_RCTL(X_RIGHT));
+                return false;
+                break;
+            case VD_PREV:
+                SEND_STRING(SS_RCTL(X_LEFT));
                 return false;
                 break;
 #endif

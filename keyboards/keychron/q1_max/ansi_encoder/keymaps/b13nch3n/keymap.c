@@ -16,6 +16,9 @@
 
 #include QMK_KEYBOARD_H
 #include "keychron_common.h"
+#ifdef CONSOLE_ENABLE
+#include "print.h"
+#endif
 #include "b13nch3n_common.h"
 
 enum layers {
@@ -71,6 +74,10 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 #endif // ENCODER_MAP_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+#ifdef CONSOLE_ENABLE
+  uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u %s\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count, VIRTUAL_SCREENSWITCHER_HOLD);
+#endif
 
     /* b13nch3ns' macros - begin */
     if (!process_record_b13nch3n(keycode, record)) {

@@ -8,11 +8,15 @@
 enum custom_keycodes {
   _B13NCH3N_DUMMY = SAFE_RANGE - 1, /* Do not use, handle macro based enum */
 #ifdef EMACS_COMMENTING_ENABLE
-    ES_CORU,               /* Emacs: comment-or-uncomment-region */
+    ES_CORU,                        /* Emacs: comment-or-uncomment-region */
 #endif
-#ifdef EMACS_BUFFER_SWITCHER_ENABLE
-    ES_NEXT,              /* Emacs: switch-to-next-buffer*/
-    ES_PREV,              /* Emacs: switch-to-prev-buffer */
+#ifdef EMACS_BUFFERSWITCHER_ENABLE
+    ES_NEXT,                        /* Emacs: switch-to-next-buffer*/
+    ES_PREV,                        /* Emacs: switch-to-prev-buffer */
+#endif
+#ifdef VIRTUAL_SCREENSWITCHER_ENABLE
+    VD_NEXT,
+    VD_PREV,
 #endif
 };
 
